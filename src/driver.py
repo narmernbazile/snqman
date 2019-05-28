@@ -1,4 +1,5 @@
 import question
+from quiz import Quiz
 
 a_dict = {
 "A": "stuff",
@@ -8,7 +9,12 @@ a_dict = {
 "E": "1000 words"
 }
 
+print(a_dict["D"])
+
 q = question.Question(1, "q data", "answer me", a_dict, "A")
 
-#print(q.get_answer_choices())
-print(q)
+
+quiz = Quiz([q])
+
+quiz.run_quiz()
+quiz.list_answers()

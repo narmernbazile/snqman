@@ -1,0 +1,5 @@
+# ignore mypy files
+src/.mypy_cache/
+
+# ignore python cache
+src/__pycache__/
