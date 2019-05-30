@@ -13,6 +13,10 @@ class Raffle(object):
         self.current_winner = None
 
     def select_winner(self):
-        winner = raffle_candidates[randint(0, len(self.raffle_candidates) - 1)]
-        self.current_winner = select_winner
+        qualified_winner = False
+        while qualified_winner == False:
+            winner = raffle_candidates[randint(0, len(self.raffle_candidates) - 1)]
+            if winner != self.previous_winner:
+                qualified_winner = False
+        self.current_winner = winner
         return winner

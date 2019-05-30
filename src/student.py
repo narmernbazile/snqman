@@ -12,6 +12,13 @@ class Student(object):
         self.favorite_cookie = favorite_cookie
         self.student_quiz = student_quiz
 
+    def __repr__(self):
+        result = ""
+        result += self.name + " "
+        result += str(self.is_present) + " "
+        result += self.favorite_cookie + " "
+        return result
+
     def set_favorite_cookie(self, favorite_cookie):
         self.favorite_cookie = favorite_cookie
 
