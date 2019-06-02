@@ -57,6 +57,27 @@ def read_questions(snq_dir_path):
         question_list.append(question.Question(question_ID, data_string, question_string, question_dict, correct_answer))
     return question_list
 
-list = read_questions("/home/n01r/dev/git/snqman/snqtree/snq/")
+def init_raffle_week(raffle_dir, week_name):
+    RAFFLE_BIN_FILENAME = "raffle-bin"
+    os.chdir(raffle_dir)
+    os.mkdir(weekname)
+    os.chdir(raffle_dir)
+    f = open(RAFFLE_BIN_FILENAME, "w+")
+    f.close()
 
-print(list)
+def write_daily_data(raffle_week_dir, day_name, data_string):
+    os.chdir(raffle_week_dir)
+    with open(day_name, "w+") as daily_file:
+
+def init_snqtree(snqtree_dir):
+if not os.listdir(os.getcwd()) and os.path.is_dir(snqtree_dir):
+        os.chdir(snqtree)
+        os.mkdir("snq")
+        with open("stdtab", "w+") as stdtab_file:
+            stdtab_file.write
+            (
+            """# stdtab: student student_table
+            #NAME, IS_PRESENT(True/False), FAVORITE COOKIES"""
+            )
+        return True
+    return False

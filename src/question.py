@@ -23,6 +23,7 @@ class Question(object):
         result += self.data_string + "\n"
         result += self.question_string + "\n"
         result += self.get_answer_choices()
+        result += "\n" + self.correct_answer #DEVEL
         return result
 
     def print_answer_choices(self):

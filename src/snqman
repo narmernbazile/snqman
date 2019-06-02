@@ -1,1 +1,36 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+import os
+import filehandler
+import question
+import quiz
+import student
+import raffle
+from datetime import date
+import calendar
+
+def append_daily_data(snqtree_path, stdtab_path, snq_dir, quiz_length, raffle_week_dir, raffle_day_name):
+    """
+    tdate = date.today()
+    weekday_name = calendar.day_name[calendar.weekday(tdate.year, tdate.month, tdate.day)]
+    current_date = "%s_%s" % (weekday_name,  tdate)
+    print(current_date)
+    """
+    std_list  = filehandler.read_student_table(stdtab_path)
+    question_list = filehandler.read_questions(snq_dir)
+    daily_quiz = quiz.Quiz(question_list, quiz_length)
+
+    os.chdir(snqtree_path)
+    #with open(current_date, "w+") as raffle_file:
+    for student in std_list:
+        result = ""
+        result += student.name + "\n"
+        result += "-----------------------------------------------------------------" + "\n"
+        student.give_quiz(daily_quiz)
+        student.student_quiz.run_quiz()
+        result += "\n"
+        num_raffle_tickets = student.student_quiz.grade_quiz()
+        filehandler.write_daily_data(raffle_week_dir, )
+        for i in range(num_raffle_tickets):
+            pass
+
+append_daily_data("/home/n01r/dev/git/snqman/snqtree/stdtab", "/home/n01r/dev/git/snqman/snqtree/snq", 2, "/home/n01r/dev/git/snqman/snqtree")
