@@ -2,20 +2,25 @@ import os
 import student
 import question
 
+
 DELIMETER = ","
 COMMENT_SYMBOL = "#"
 
-def read_student_table(student_table_path: str) -> list:
+SNQTREE_PATH = ""
+RAFFLE_PATH = SNQTREE_PATH + "raffle"
+QUESTIONS_PATH = SNQTREE_PATH + "questions"
+STDTAB_PATH = SNQTREE_PATH + "stdtab"
+RAFFLE_BIN_FILENAME = "raffle-bin"
+
+def read_student_table(snq_tree_path: str) -> list:
+    SNQTREE_PATH = snq_tree_path
     std_list = []
-    with open(student_table_path) as student_table:
+    os.chdir(SNQTREE_PATH)
+    with open(STDTAB_PATH) as student_table:
         for entry in student_table.readlines():
-            #entry = "".join(list(filter(lambda char: char not in "\n", entry)))
             if entry == "\n" or entry == "\r":
                 continue
             elif COMMENT_SYMBOL not in entry:
-                #print(entry, end='')
-                #print(entry.index(DELIMETER))
-
                 std_name = entry[0 : entry.index(DELIMETER)]
                 entry = entry[entry.index(DELIMETER) + 2:]
                 std_present = True if entry[0: entry.index(DELIMETER)] == "True" else False
@@ -57,22 +62,49 @@ def read_questions(snq_dir_path):
         question_list.append(question.Question(question_ID, data_string, question_string, question_dict, correct_answer))
     return question_list
 
-def init_raffle_week(raffle_dir, week_name):
-    RAFFLE_BIN_FILENAME = "raffle-bin"
-    os.chdir(raffle_dir)
-    os.mkdir(weekname)
-    os.chdir(raffle_dir)
-    f = open(RAFFLE_BIN_FILENAME, "w+")
-    f.close()
+def init_raffle_week(snqtree_path, week_name):
+    """Create new folder week_name inside raffle_dir """
+    os.chdir(snqtree_path)
+    os.chdir(RAFFLE_PATH)
+    #print(os.path.isdir(week_name))
+    #print(week_name)
+    if not os.path.isdir(week_name):
+        os.mkdir(week_name)
+        os.chdir(week_name)
+        f = open(RAFFLE_BIN_FILENAME, "w+")
+        f.close()
 
-def write_daily_data(raffle_week_dir, day_name, data_string):
+def write_daily_data(snqtree_path, week_name, day_name, student):
+    os.chdir(snqtree_path)
+    os.chdir(RAFFLE_PATH)
+    os.chdir(week_name)
+    result = ""
+    result += student.name + "\n"
+    result += "-----------------------------------------------------------------" + "\n"
+    result += student.student_quiz.list_answers()
+    result += "\n"
+    with open(day_name, "a+") as daily_file:
+        daily_file.write(result)
+
+def add_to_raffle(raffle_week_dir, student_name):
+    with open(RAFFLE_BIN_FILENAME, "a") as raffle_bin_file:
+        raffle_bin_file.write(student_name + "\n")
+
+def read_raffle(raffle_week_dir):
     os.chdir(raffle_week_dir)
-    with open(day_name, "w+") as daily_file:
+    raffle_candidates_list = []
+    with open(RAFFLE_BIN_FILENAME, "r") as raffle_bin_file:
+        temp_list = raffle_bin_file.readlines()
+    #strip off newline characters
+    for line in temp_list:
+        raffle_candidates_list.append(line[:-1])
+    return raffle_candidates_list
 
 def init_snqtree(snqtree_dir):
-if not os.listdir(os.getcwd()) and os.path.is_dir(snqtree_dir):
-        os.chdir(snqtree)
-        os.mkdir("snq")
+    if os.path.isdir(snqtree_dir):
+        os.chdir(snqtree_dir)
+        os.mkdir("questions")
+        os.mkdir("raffle")
         with open("stdtab", "w+") as stdtab_file:
             stdtab_file.write
             (
@@ -80,4 +112,5 @@ if not os.listdir(os.getcwd()) and os.path.is_dir(snqtree_dir):
             #NAME, IS_PRESENT(True/False), FAVORITE COOKIES"""
             )
         return True
-    return False
+    else:
+        return False

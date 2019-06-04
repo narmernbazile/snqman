@@ -20,15 +20,15 @@ class Quiz(object):
             self.answer_list.append(question_answer)
 
     def list_answers(self):
+        result = ""
         if self.answer_list:
             for (question, answer) in list(zip(self.question_list, self.answer_list)):
-                print("QUESTION #%s | CORRECT ANSWER : %s | STUDENT ANSWER: %s" % ( question.question_ID, question.correct_answer, answer  )  )
-
+                result +=  "QUESTION #%s | CORRECT ANSWER : %s | STUDENT ANSWER: %s" % ( question.question_ID, question.correct_answer, answer  ) + "\n"
+        return result
     def grade_quiz(self) -> int:
         """ Return integer representing number of questions correct """
         num_correct = 0
-        for question in self.question_list:
-            for answer in self.answer_list:
+        for (question, answer) in list(zip(self.question_list, self.answer_list)):
                 if answer == question.correct_answer:
                     num_correct += 1
         return num_correct
