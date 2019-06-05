@@ -2,10 +2,8 @@ from random import randint
 
 class Raffle(object):
     """
-
-
+    #TODO: docstring goes here
     """
-
     def __init__(self, previous_winner: str, current_week: str, raffle_candidates: list = []):
         self.previous_winner = previous_winner
         self.current_week = current_week

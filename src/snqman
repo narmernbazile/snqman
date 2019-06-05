@@ -1,0 +1,46 @@
+#! /usr/bin/env python3
+
+import argparse
+import os
+import controller
+import filehandler
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("COMMAND", help="tell snqman which action to perform")
+    parser.add_argument("--week-name", help="specify which week for snqman to act on")
+    parser.add_argument("--day-name", help="specify which day for snqman to create data for")
+    parser.add_argument("--random", help="randomize quiz input", action="store_true")
+    parser.add_argument("--quiz-length", help="specify number of questions per quiz", type=int)
+    parser.add_argument("--previous_winner", help="specify previous_winner so they may be banned from this week's raffle")
+    #paser.add_arguement()
+    args = parser.parse_args()
+
+    snqtree_path = os.getcwd()
+    if args.COMMAND == "init":
+        filehandler.init_snqtree(snqtree_path)
+        print("done.")
+    elif args.COMMAND == "init-week":
+        if args.week_name:
+            filehandler.init_raffle_week(snqtree_path, args.week_name)
+            print("done.")
+        else:
+            print("[ERROR] arugment not specified: week_name")
+    elif args.COMMAND == "update-raffle":
+        if not args.week_name:
+            print("[ERROR] arugment not specified: week_name")
+        elif not args.day_name:
+            print("[ERROR] arugment not specified: day_name")
+        else:
+            if args.quiz_length:
+                controller.append_daily_data(snqtree_path, args.week_name, args.day_name, quiz_length = args.quiz_length, random = args.random)
+            else:
+                controller.append_daily_data(snqtree_path, args.week_name, args.day_name, random = args.random)
+    elif args.COMMAND == "hold-raffle":
+        if not args.week_name:
+            print("[ERROR] arugment not specified: week_name")
+        else:
+            print("DEBUG: " + str(args.previous_winner))
+            controller.hold_weekly_raffle(snqtree_path, args.week_name, args.previous_winner)
+main()

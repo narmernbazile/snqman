@@ -9,7 +9,7 @@ from time import sleep
 from constants import *
 from random import randint
 
-def append_daily_data(snqtree_path, quiz_length, raffle_week_name, raffle_day_name):
+def append_daily_data(snqtree_path, raffle_week_name, raffle_day_name, quiz_length = 2, random = False):
     stdtab_path = snqtree_path + "/stdtab"
     snq_dir = snqtree_path + "/questions"
     raffle_dir = snqtree_path + "/raffle"
@@ -17,20 +17,19 @@ def append_daily_data(snqtree_path, quiz_length, raffle_week_name, raffle_day_na
 
     std_list  = filehandler.read_student_table(snqtree_path)
     question_list = filehandler.read_questions(snq_dir)
-    daily_quiz = quiz.Quiz(question_list, quiz_length)
 
     filehandler.init_raffle_week(snqtree_path, raffle_week_name)
     for student in std_list:
-        student.give_quiz(daily_quiz)
+        student.give_quiz(quiz.Quiz(question_list, quiz_length))
         print(student.name)
         print("-----------------------------------------------------------------")
-        student.student_quiz.run_quiz()
+        student.student_quiz.run_quiz(random)
         num_raffle_tickets = student.student_quiz.grade_quiz()
         filehandler.write_daily_data(snqtree_path, raffle_week_name, raffle_day_name, student)
         for i in range(num_raffle_tickets):
             filehandler.add_to_raffle(raffle_week_path, student.name)
 
-def hold_weekly_raffle(snqtree_path, current_week_name, previous_winner_name):
+def hold_weekly_raffle(snqtree_path, current_week_name, previous_winner_name = ""):
     stdtab_path = snqtree_path + "/stdtab"
     snq_dir = snqtree_path + "/questions"
     raffle_dir = snqtree_path + "/raffle"
@@ -60,8 +59,6 @@ def hold_weekly_raffle(snqtree_path, current_week_name, previous_winner_name):
     print("%s has won the raffle!" % (raffle_winner_name) )
     print("%s would like %s!" % (raffle_winner_name, cookie_choice))
 
-
-
 def purge_absent_students(std_list, raffle_candidates_list):
     for student in std_list:
         if student.is_present == False:
@@ -80,5 +77,5 @@ def get_cookie_choice(student_name, std_list):
         if student.name == student_name:
             return student.favorite_cookie
 
-hold_weekly_raffle("/home/n01r/dev/git/snqman/snqtree", "testweek1", "")
-#append_daily_data("/home/n01r/dev/git/snqman/snqtree", 2, "testweek1", "monday")
+#append_daily_data("/home/n01r/dev/git/snqman/snqtree", 2, "testweek2", "monday")
+#hold_weekly_raffle("/home/n01r/dev/git/snqman/snqtree", "testweek1", "")

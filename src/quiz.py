@@ -13,11 +13,18 @@ class Quiz(object):
             self.question_list.append( question_list[ randint(0, len(question_list) - 1) ] )
         self.quiz_length = quiz_length
 
-    def run_quiz(self):
+    def run_quiz(self, random_flag):
         for question in self.question_list:
             print(question)
-            question_answer  = str(input("Enter Answer Choice: "))
+            if random_flag:
+                question_dict_keys = list(question.answer_dict.keys())
+                question_answer = question_dict_keys[randint(0, len(question_dict_keys) - 1)]
+                print("Enter Answer Choice: %s" %(question_answer), end="")
+            else:
+                question_answer = str(input("Enter Answer Choice: "))
+            print()
             self.answer_list.append(question_answer)
+            #print("DEBUG: " + str(self.answer_list))
 
     def list_answers(self):
         result = ""

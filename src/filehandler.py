@@ -12,7 +12,7 @@ QUESTIONS_PATH = SNQTREE_PATH + "questions"
 STDTAB_PATH = SNQTREE_PATH + "stdtab"
 RAFFLE_BIN_FILENAME = "raffle-bin"
 
-def read_student_table(snq_tree_path: str) -> list:
+def read_student_table(snq_tree_path: str):
     SNQTREE_PATH = snq_tree_path
     std_list = []
     os.chdir(SNQTREE_PATH)
@@ -27,7 +27,7 @@ def read_student_table(snq_tree_path: str) -> list:
                 entry = entry[entry.index(DELIMETER) + 2:]
                 std_cookie = entry[0: -1]
                 std_list.append(student.Student(std_name, std_present, std_cookie))
-        return std_list
+    return std_list
 
 def write_student_table(student_table_path: str, std_name: str, std_present: bool, std_cookie: str):
     with open(student_table_path, "r") as student_table:
@@ -106,11 +106,8 @@ def init_snqtree(snqtree_dir):
         os.mkdir("questions")
         os.mkdir("raffle")
         with open("stdtab", "w+") as stdtab_file:
-            stdtab_file.write
-            (
-            """# stdtab: student student_table
-            #NAME, IS_PRESENT(True/False), FAVORITE COOKIES"""
-            )
+            stdtab_file.write(
+            "# stdtab: student student_table\n#NAME, IS_PRESENT(True/False), FAVORITE COOKIES\n")
         return True
     else:
         return False
