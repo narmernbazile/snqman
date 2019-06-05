@@ -25,7 +25,7 @@ def read_student_table(snq_tree_path: str) -> list:
                 entry = entry[entry.index(DELIMETER) + 2:]
                 std_present = True if entry[0: entry.index(DELIMETER)] == "True" else False
                 entry = entry[entry.index(DELIMETER) + 2:]
-                std_cookie = entry[0:]
+                std_cookie = entry[0: -1]
                 std_list.append(student.Student(std_name, std_present, std_cookie))
         return std_list
 
