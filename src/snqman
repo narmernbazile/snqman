@@ -13,7 +13,8 @@ def main():
     parser.add_argument("--day-name", help="specify which day for snqman to create data for")
     parser.add_argument("--random", help="randomize quiz input", action="store_true")
     parser.add_argument("--quiz-length", help="specify number of questions per quiz", type=int)
-    parser.add_argument("--previous_winner", help="specify previous_winner so they may be banned from this week's raffle")
+    parser.add_argument("--previous-winner", help="specify previous_winner so they may be banned from this week's raffle")
+
     #paser.add_arguement()
     args = parser.parse_args()
 
@@ -41,6 +42,14 @@ def main():
         if not args.week_name:
             print("[ERROR] arugment not specified: week_name")
         else:
-            print("DEBUG: " + str(args.previous_winner))
             controller.hold_weekly_raffle(snqtree_path, args.week_name, args.previous_winner)
+    elif args.COMMAND == "add-student":
+        if not args.week_name:
+            print("[ERROR] arugment not specified: week_name")
+        elif not args.previous_winner:
+            print("[ERROR] arugment not specified: previous-winner")
+        else:
+            filehandler.add_to_raffle(snqtree_path, args.week_name, args.previous_winner)
+    else:
+        print("[ERROR] unrecognized command")
 main()

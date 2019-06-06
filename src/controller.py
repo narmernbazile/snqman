@@ -27,7 +27,7 @@ def append_daily_data(snqtree_path, raffle_week_name, raffle_day_name, quiz_leng
         num_raffle_tickets = student.student_quiz.grade_quiz()
         filehandler.write_daily_data(snqtree_path, raffle_week_name, raffle_day_name, student)
         for i in range(num_raffle_tickets):
-            filehandler.add_to_raffle(raffle_week_path, student.name)
+            filehandler.add_to_raffle(snqtree_path, raffle_week_name, student.name)
 
 def hold_weekly_raffle(snqtree_path, current_week_name, previous_winner_name = ""):
     stdtab_path = snqtree_path + "/stdtab"
@@ -49,11 +49,17 @@ def hold_weekly_raffle(snqtree_path, current_week_name, previous_winner_name = "
     sleep(0.1)
     raffle_candidates_list = purge_absent_students(std_list, raffle_candidates_list)
 
-    print("Purging previous winner entries...")
-    sleep(0.1)
-    raffle_candidates_list = purge_previous_winner(raffle_candidates_list, previous_winner_name)
+    acceptable = False
+    while not acceptable:
+        raffle_winner_name = raffle_candidates_list[randint(0, len(raffle_candidates_list) - 1)]
+        if raffle_winner_name == previous_winner_name:
+            print("THINK AGAIN!")
+            print("%s won the raffle last time!" % (previous_winner_name))
+            print("Redrawing...")
+            filehandler.write_rstage(snqtree_path, previous_winner_name)
+        else:
+            acceptable = True
 
-    raffle_winner_name = raffle_candidates_list[randint(0, len(raffle_candidates_list) - 1)]
     cookie_choice = get_cookie_choice(raffle_winner_name, std_list)
 
     print("%s has won the raffle!" % (raffle_winner_name) )
@@ -76,6 +82,3 @@ def get_cookie_choice(student_name, std_list):
     for student in std_list:
         if student.name == student_name:
             return student.favorite_cookie
-
-#append_daily_data("/home/n01r/dev/git/snqman/snqtree", 2, "testweek2", "monday")
-#hold_weekly_raffle("/home/n01r/dev/git/snqman/snqtree", "testweek1", "")

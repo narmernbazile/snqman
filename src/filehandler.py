@@ -11,6 +11,7 @@ RAFFLE_PATH = SNQTREE_PATH + "raffle"
 QUESTIONS_PATH = SNQTREE_PATH + "questions"
 STDTAB_PATH = SNQTREE_PATH + "stdtab"
 RAFFLE_BIN_FILENAME = "raffle-bin"
+RAFFLE_STAGE = "rstage"
 
 def read_student_table(snq_tree_path: str):
     SNQTREE_PATH = snq_tree_path
@@ -71,8 +72,13 @@ def init_raffle_week(snqtree_path, week_name):
     if not os.path.isdir(week_name):
         os.mkdir(week_name)
         os.chdir(week_name)
-        f = open(RAFFLE_BIN_FILENAME, "w+")
-        f.close()
+        with open(RAFFLE_BIN_FILENAME, "w+") as rbin:
+            #for name in read_rstage(snqtree_path):
+            rbin.write("")
+        for previous_winner_entry in read_rstage(snqtree_path):
+            previous_winner_entry = previous_winner_entry[:-1] #strip newline
+            add_to_raffle(snqtree_path, week_name, previous_winner_entry)
+
 
 def write_daily_data(snqtree_path, week_name, day_name, student):
     os.chdir(snqtree_path)
@@ -86,7 +92,10 @@ def write_daily_data(snqtree_path, week_name, day_name, student):
     with open(day_name, "a+") as daily_file:
         daily_file.write(result)
 
-def add_to_raffle(raffle_week_dir, student_name):
+def add_to_raffle(snqtree_path, week_name, student_name):
+    os.chdir(snqtree_path)
+    os.chdir(RAFFLE_PATH)
+    os.chdir(week_name)
     with open(RAFFLE_BIN_FILENAME, "a") as raffle_bin_file:
         raffle_bin_file.write(student_name + "\n")
 
@@ -105,9 +114,36 @@ def init_snqtree(snqtree_dir):
         os.chdir(snqtree_dir)
         os.mkdir("questions")
         os.mkdir("raffle")
+        os.chdir("raffle")
+        with open("rstage", "w+") as rstage:
+            rstage.write("")
+        os.chdir("..")
         with open("stdtab", "w+") as stdtab_file:
             stdtab_file.write(
             "# stdtab: student student_table\n#NAME, IS_PRESENT(True/False), FAVORITE COOKIES\n")
+
+        os.chdir("raffle")
+        with open(RAFFLE_STAGE, "w+") as rstage:
+            rstage.write("")
         return True
     else:
         return False
+
+
+def write_rstage(snqtree_path, name):
+    os.chdir(snqtree_path)
+    os.chdir(RAFFLE_PATH)
+    with open(RAFFLE_STAGE, "a") as rstage:
+        rstage.write(name + "\n")
+
+
+def read_rstage(snqtree_path):
+    os.chdir(snqtree_path)
+    os.chdir(RAFFLE_PATH)
+    names_list = []
+    with open(RAFFLE_STAGE, "r") as rstage:
+        temp_list = rstage.readlines()
+    #strip newline characters
+    for line in temp_list:
+        names_list.append(line[:-1])
+    return names_list
